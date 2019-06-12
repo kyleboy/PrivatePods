@@ -18,7 +18,7 @@ if version == '1000.0.0'
   # This is an unpublished version, use the latest commit hash of the react-native repo, which we’re presumably in.
   source[:commit] = `git rev-parse HEAD`.strip
 else
-  source[:tag] = "#{version}"
+  source[:tag] = "v#{version}"
 end
 
 folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1'
@@ -53,7 +53,7 @@ Pod::Spec.new do |s|
   s.cocoapods_version       = ">= 1.2.0"
 
   s.subspec "Core" do |ss|
-    ss.dependency             "React/yoga"
+    ss.dependency             "yoga", "#{package["version"]}.React"
     ss.source_files         = "React/**/*.{c,h,m,mm,S,cpp}"
     ss.exclude_files        = "**/__tests__/*",
                               "IntegrationTests/*",
@@ -355,17 +355,4 @@ Pod::Spec.new do |s|
     ss.dependency             "React/CxxBridge"
   end
 
-  s.subspec "yoga" do |spec|
-    spec.header_dir           = "yoga"
-    spec.requires_arc = false
-    spec.compiler_flags = [
-        '-fno-omit-frame-pointer',
-        '-fexceptions',
-        '-Wall',
-        '-Werror',
-        '-std=c++1y',
-        '-fPIC'
-    ]
-    spec.source_files = 'ReactCommon/yoga/yoga/**/*.{cpp,h}'
-  end
 end
